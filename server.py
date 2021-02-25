@@ -16,7 +16,7 @@ def main() -> None:
         # on_fit_config_fn=fit_config,
         # on_evaluate_config_fn=evaluate_config,
     )
-    # Start Flower server for four rounds of federated learning
+    # Start Flower server for three rounds of federated learning
     fl.server.start_server("[::]:8080", config={"num_rounds": 3}, strategy=strategy)
 
 

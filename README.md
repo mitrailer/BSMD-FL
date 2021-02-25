@@ -1,14 +1,20 @@
-## Run the experiment
+## Install dependencies
+On a virtual environment run
+```commandline
+pip install flwr
+pip install tensorflow
+```
 
+## Run the experiment
 Open three or more shell
 
 On one shell run:
-```console
+```commandline
 python server.py
 ```
 Wait one or two seconds
 On the other shell run:
-```console
+```commandline
 python client.py
 ```
 
