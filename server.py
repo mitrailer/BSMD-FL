@@ -4,8 +4,18 @@ https://github.com/adap/flower/blob/main/examples/advanced_tensorflow/server.py
 """
 
 from typing import Optional, Tuple
+import os
+import sys
 import tensorflow as tf
 import flwr as fl
+import pandas as pd
+import utils.iroha_config as iroha_config
+import utils.iroha_functions as iroha_functions
+from iroha import Iroha
+
+# Get the name of the chief. This function will take the first argument after 'python3 server.py', i.e., chief
+# when you run the program
+name = sys.argv[1]
 
 
 def main() -> None:
@@ -17,6 +27,7 @@ def main() -> None:
         # on_evaluate_config_fn=evaluate_config,
     )
     # Start Flower server for three rounds of federated learning
+    # Change [::] for the ip address of the server
     fl.server.start_server("[::]:8080", config={"num_rounds": 3}, strategy=strategy)
 
 
@@ -54,6 +65,14 @@ def fit_config(rnd: int):
         "batch_size": 32,
         "local_epochs": 1 if rnd < 2 else 2,
     }
+    # set_detail_to_node(iroha, account_id, private_key, detail_key, detail_value):
+    key_pairs = pd.read_csv("../iroha_keys/keypairs.csv")
+    # 0 is the ketpair of the chief
+    p_key = key_pairs['private_key'][0]
+    domain = iroha_config.domain_id
+    net = name + "@" + domain
+    # this function will send a transaction to the blockchain
+    iroha_functions.set_detail_to_node(Iroha(net), net, p_key, 'model_round_n', 'file_model_round_n')
     return config
 
 
@@ -67,6 +86,7 @@ def evaluate_config(rnd: int):
     """
     val_steps = 5 if rnd < 4 else 10
     return {"val_steps": val_steps}
+
 
 if __name__ == "__main__":
     main()
