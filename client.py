@@ -44,7 +44,7 @@ class Client(fl.client.NumPyClient):
         print("Send request to blockchain")
         # set_detail_to_node(iroha, account_id, private_key, detail_key, detail_value):
         key_pairs = pd.read_csv("../iroha_keys/keypairs.csv")
-         # i is equal to the index for the worker. For instance if name=worker1 then i=1
+        # i is equal to the index for the worker. For instance if name=worker1 then i=1
         p_key = key_pairs['private_key'][i]
         name = self.name
         domain = iroha_config.domain_id
@@ -74,7 +74,7 @@ def main() -> None:
     model = tf.keras.applications.MobileNetV2((32, 32, 3), classes=10, weights=None)
     model.compile("adam", "sparse_categorical_crossentropy", metrics=["accuracy"])
 
-    # Get the train sets from a file
+    # Get the train sets from a file that corresponds to the name of the worker
     x,y= get_trainset_from_name
     x_train = worker_1/trainset/file_1_x.npy
     y_train = worker_1 / trainset / file_1_x.npy
